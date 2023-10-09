@@ -24,7 +24,7 @@ xTest, yTest = test[:,1:10].tolist(), test[:,0].tolist()             ## Dữ Li�
 
 title = ['cap-shape','cap-surface','cap-color','bruises','odor','gill-attachment','gill-spacing','gill-size','gill-color']
 
-DecisionTree = MyDecisionTreeClassifier(title=title, x_train=xTrain, y_train=yTrain)
+DecisionTree = MyDecisionTreeClassifier(title=title, x_train=xTrain, y_train=yTrain, criterion='gini')
 DecisionTree.fit()
 yPredict = DecisionTree.predict(xTest)                                 ## Dự đoán tập test
 count = 0                                                   ## Tạo một biến đếm

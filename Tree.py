@@ -13,10 +13,13 @@ class Node:
         return res
     
 class MyDecisionTreeClassifier():
-    def __init__(self, title: list, x_train, y_train) -> None:
+    def __init__(self, title: list, x_train, y_train, criterion='entropy') -> None:
         if len(title) != len(x_train[0]) or len(x_train) != len(y_train):
             raise ValueError('Parameters is not valid!')
+        if criterion not in ['entropy', 'gini']:
+            raise ValueError('Invalid value for paramater criterion!')
         self.title = title
+        self.criterion = criterion
         self.yTrain = y_train
         self.xTrain = []
         if not str(type(x_train[0])) == "<class 'dict'>":
@@ -30,7 +33,7 @@ class MyDecisionTreeClassifier():
 
     def entropy(self, data, className, title):
         att = set(map(lambda x: x[title], data))
-        entroPoint = 0
+        entroPoint = 0 if self.criterion == 'entropy' else 1
         for i in att:
             yclass = []
             for index, val in enumerate(data):
@@ -41,8 +44,8 @@ class MyDecisionTreeClassifier():
             subPoint = 0
             for j in numberOfClass:
                 count = yclass.count(j)
-                subPoint += -(count/totalClass)*math.log(count/totalClass)
-            entroPoint += totalClass/len(data)*subPoint
+                subPoint += -(count/totalClass)*math.log(count/totalClass) if self.criterion == 'entropy' else (count/totalClass)**2
+            entroPoint += totalClass/len(data)*subPoint if self.criterion == 'entropy' else -totalClass/len(data)*subPoint
         return entroPoint
 
     def buildTree(self, xData, yClass, labels: list):
